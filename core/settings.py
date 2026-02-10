@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import dj_database_url  # Ye line Render ke database ke liye zaroori hai
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,9 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1c0q5u%i7ezdllj7^7okf#sf^9k8soiwz=nj8$ehd!1!u^hox$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # Deployment ke baad isse False kar sakte hain
 
-ALLOWED_HOSTS = []
+# Render ki URL aur local dono ko allow karne ke liye
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -23,16 +25,18 @@ INSTALLED_APPS = [
 
     # Third Party Apps
     'rest_framework',
-    'rest_framework.authtoken', # Token Authentication ke liye
+    'rest_framework.authtoken',
     'corsheaders',
-    
+    'whitenoise.runserver_nostatic',  # Static files cloud par chalane ke liye
+
     # Your App
     'api',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Hamesha top par
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files ke liye zaroori line
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -45,8 +49,8 @@ ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates', # Yahan 'template' hona chahiye, 'templates' nahi
-        'DIRS': [BASE_DIR / 'templates'],
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -61,16 +65,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database Configuration (PostgreSQL)
+# Database Configuration (Render ke liye Dynamic)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'postgres',
-        'PASSWORD': '', # Agar 'trust' mode hai toh khali chor dein, warna apna password likhein
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        # Agar Render ka environment variable mile toh wo use karo, warna local postgres
+        default='postgresql://postgres:postgres@localhost:5432/ecommerce_db',
+        conn_max_age=600
+    )
 }
 
 # Password validation
@@ -95,8 +96,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Static & Media Files
-STATIC_URL = 'static/'
-CORS_ALLOW_ALL_ORIGINS = True # Flutter app se connection ke liye zaroori hai
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
