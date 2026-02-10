@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-1c0q5u%i7ezdllj7^7okf#sf^9k8soiwz=nj8$ehd!1!u^hox$
 DEBUG = True  # Deployment ke baad isse False kar sakte hain
 
 # Render ki URL aur local dono ko allow karne ke liye
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['jagdesh666.pythonanywhere.com', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -68,9 +68,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database Configuration (Render ke liye Dynamic)
 DATABASES = {
     'default': dj_database_url.config(
-        # Agar Render ka environment variable mile toh wo use karo, warna local postgres
-        default='postgresql://postgres:postgres@localhost:5432/ecommerce_db',
-        conn_max_age=600
+        default='postgresql://neondb_owner:npg_p6QOs8ExVtdU@ep-red-grass-aino1wl6-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
