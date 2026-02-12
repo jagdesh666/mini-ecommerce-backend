@@ -67,11 +67,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database Configuration (Render ke liye Dynamic)
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://neondb_owner:npg_p6QOs8ExVtdU@ep-red-grass-aino1wl6-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
