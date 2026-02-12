@@ -12,7 +12,8 @@ SECRET_KEY = 'django-insecure-1c0q5u%i7ezdllj7^7okf#sf^9k8soiwz=nj8$ehd!1!u^hox$
 DEBUG = True  # Deployment ke baad isse False kar sakte hain
 
 # Render ki URL aur local dono ko allow karne ke liye
-ALLOWED_HOSTS = ['jagdesh666.pythonanywhere.com', '127.0.0.1']
+# Ismein aapka sahi domain hona chahiye
+ALLOWED_HOSTS = ['pppjagdesh1234.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 # Application definition
 INSTALLED_APPS = [
